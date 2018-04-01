@@ -51,7 +51,7 @@ def myNetwork():
     net = Mininet(topo=topo)
     net.start()
 
-    # Run the test
+    # Run the CLI
     info(net['r1'].cmd('route'))
     CLI(net)
     net.stop()
