@@ -16,27 +16,26 @@ class Router(Node):
         self.cmd('sysctl net.ipv4.ip_forward=0')
         super(Router, self).terminate()
 
-class NetworkTopo(Topo):
+class NetTopo(Topo):
     def build(self, **_opts):
-        info( '*** Adding controller\n' )
-        info( '*** Add switches\n')
-        r1 = self.addNode('r1', cls=Router, ip='10.0.1.1')
+        r1 = self.addNode('r1', cls=Router, ip='10.0.1.1/8')
+        s1 = self.addSwitch('s1')
 
-        info( '*** Add hosts\n')
-        h2 = self.addHost('h2', cls=Host, ip='10.0.0.2', defaultRoute='via 10.0.1.1')
-        h1 = self.addHost('h1', cls=Host, ip='10.0.0.1', defaultRoute='via 10.0.1.1')
+        self.addLink(s1, r1, intfName2='r1-eth1',
+                     params2=dict(ip='10.0.1.1/8'))
 
-        info( '*** Add links\n')
-        self.addLink(h1, r1)
-        self.addLink(h2, r1)
+        #h2 = self.addHost('h2', cls=Host, ip='10.0.0.2/8', defaultRoute='via 10.0.1.1')
+        h1 = self.addHost('h1', cls=Host, ip='10.0.0.1/8', defaultRoute='via 10.0.1.1')
 
-        info( '*** Starting network\n')
+        self.addLink(h1, s1)
+        #self.addLink(h2, s1)
 
 if __name__ == '__main__':
-    setLogLevel( 'info' )
-    topo = NetworkTopo()
-    net = Mininet( topo=topo,
-                   ipBase='10.0.0.0/8')
+    setLogLevel('info')
+    topo = NetTopo()
+    net = Mininet(topo=topo)
+    net.start()
+    info(net['r1'].cmd('route'))
     CLI(net)
     net.stop()
 
