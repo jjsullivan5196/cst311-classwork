@@ -43,8 +43,8 @@ h2 ping -c3 h1
 '''
 
 def myNetwork():
-    with open('tmp.sh', 'w') as scr:
-        scr.writelines(text)
+    #with open('tmp.sh', 'w') as scr:
+    #    scr.writelines(text)
 
     # Setup the network
     topo = NetTopo()
@@ -53,7 +53,7 @@ def myNetwork():
 
     # Run the test
     info(net['r1'].cmd('route'))
-    CLI(net, script='tmp.sh')
+    CLI(net)
     net.stop()
 
 if __name__ == '__main__':
