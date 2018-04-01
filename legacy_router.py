@@ -30,12 +30,20 @@ class NetTopo(Topo):
         self.addLink(h1, s1)
         self.addLink(h2, s1)
 
+text = '''
+h1 ping -c3 h2
+h2 ping -c3 h1
+exit
+'''
 if __name__ == '__main__':
+    with open('tmp.sh', 'w') as scr:
+        scr.writelines(text)
+
     setLogLevel('info')
     topo = NetTopo()
     net = Mininet(topo=topo)
     net.start()
-    info(net['r1'].cmd('route'))
-    CLI(net)
-    net.stop()
 
+    info(net['r1'].cmd('route'))
+    CLI(net, script='tmp.sh')
+    net.stop()
