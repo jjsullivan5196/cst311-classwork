@@ -43,12 +43,11 @@ h2 ping -c3 h1
 exit
 '''
 
-if __name__ == '__main__':
+def myNetwork():
     with open('tmp.sh', 'w') as scr:
         scr.writelines(text)
 
     # Setup the network
-    setLogLevel('info')
     topo = NetTopo()
     net = Mininet(topo=topo)
     net.start()
@@ -57,3 +56,7 @@ if __name__ == '__main__':
     info(net['r1'].cmd('route'))
     CLI(net, script='tmp.sh')
     net.stop()
+
+if __name__ == '__main__':
+    setLogLevel('info')
+    myNetwork()
